@@ -1,6 +1,10 @@
 # PythonGRNG
 Standalone version of my random number generator for Python
 
+The perlin octave noise is currently struggling with performance
+in ways the c# version does not.
+
+
 Currently available algorithms for general selection:
 
 ```
