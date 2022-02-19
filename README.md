@@ -1,5 +1,5 @@
 # PythonGRNG
-My random number generator for Python
+Standalone version of my random number generator for Python
 
 Currently available algorithms for general selection:
 
