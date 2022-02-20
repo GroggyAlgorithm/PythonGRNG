@@ -1,5 +1,5 @@
 # PythonGRNG
-Standalone version of my random number generator for Python. Reuires python 3.10+.
+Standalone version of my random number generator for Python. Requires python 3.10+.
 
 The perlin octave noise is currently struggling with performance in ways the c# version does not. 
 
