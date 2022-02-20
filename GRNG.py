@@ -482,7 +482,7 @@ class GRNG:
 
     def CenteredRandom(self, iterations:int) -> float:
         """Returns the most centered of values in a range up to x iterations"""
-        rVal = 0
+        rVal = 1
         for i in range(0, iterations):
             rand = self.Next()
             if (abs(rand) - 0.5) < (rVal - 0.5): rVal = rand
