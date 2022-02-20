@@ -10,20 +10,21 @@ octave noise or the square root for the 2D.
 Currently available algorithms for general selection:
 
 ```
-# algo:str=None - The random algorithm to use\n
-# Current choices (case insensitive):\n
-#
-# default and incorrect args - Adapted lehmer 32 algorithm
-#
-# 'x32' - Xor shift 32 algorithm
-#
-# 'x64' - Xor shift 64 algorithm
-#
-# 'x128' - Xor shift 128 algorithm
-#
-# 'wy64' - The w.y. hash 64 algorithm
-#
-# 'l64' - The lehmer 64 algorithm
+ seed:int - The starting seed for the psuedo random number generator.\n
+ algo:str - The random algorithm to use.\n
+ Current algorithm choices (case insensitive):\n
+
+ default and incorrect args - An edited and and Adapted lehmer 32 bit algorithm.
+
+ 'x32' - Xor shift 32 bit algorithm
+
+ 'x64' - Xor shift 64 bit algorithm
+
+ 'x128' - Xor shift 128 bit algorithm
+
+ 'wy64' - The w.y. hash 64 bit algorithm
+
+ 'l64' - The lehmer 64 bit algorithm
 
 ```
 
