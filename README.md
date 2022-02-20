@@ -2,7 +2,9 @@
 Standalone version of my random number generator for Python
 
 The perlin octave noise is currently struggling with performance
-in ways the c# version does not.
+in ways the c# version does not. I imagine this id due to me looping through
+the full resolution size on each axis as opposed to the cube root in the 3D
+octave noise or the square root for the 2D.
 
 
 Currently available algorithms for general selection:
