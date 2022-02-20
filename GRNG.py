@@ -466,7 +466,7 @@ class GRNG:
 
     def Gaussian(self, center:Number, deviation:Number) -> float:
         """Creates a random value based on averaging around a point instead of an even distibution"""
-        return (center + self.Gaussian() * deviation)
+        return (center + self.NextGaussian() * deviation)
 
     def SmallestRandom(self, iterations:int) -> float:
         """Returns the smallest value in x iterations"""
@@ -515,7 +515,7 @@ class GRNG:
 
         return newPermutation
     
-    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0) -> float:
+    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0.25) -> float:
         """Ken perlins improved noise
 
         Arguments
@@ -573,7 +573,7 @@ class GRNG:
                     self.__CbLerp(u, self.Gradient(p[AB+1], x  , y-1, z-1 ),
                     self.Gradient(p[BB+1], x-1, y-1, z-1 ))))
 
-        return (rVal * GRNG.__MAX_VALUE)
+        return (rVal)
 
 
     def SimplePerlin2D(self, xIteration:Number,  yIteration:Number, noiseScale:Number, frequency:Number, 
@@ -668,11 +668,11 @@ class GRNG:
         
         
         noiseMap = []
-        octaveOffsets = [[]]
-        
+        octaveOffsets = [[0,0]]
         if octaveAmount <= 0 or resolution <= 0: 
             warn('Octave count and resolution must be a positive integer value')
             return -1
+        
         
         centerLocation = resolution/2
         amplitude = 1
@@ -698,13 +698,6 @@ class GRNG:
                 for i in octaveOffsets:
                     noise = self.SimplePerlin2D(xIteration=x,yIteration=y, noiseScale=scale,frequency=frequency,offsetX=i[0],
                                                 offsetY=i[1], centerX=centerLocation,centerY=centerLocation)
-                    noiseValue += noise * amplitude
-                    amplitude *= persistance
-                    frequency *= lacunarity
-                
-                for i in range(0, octaveAmount):
-                    noise = self.SimplePerlin2D(xIteration=x,yIteration=y,noiseScale=scale,frequency=frequency,offsetX=octaveOffsets[[i][0]],
-                                                offsetY=octaveOffsets[[i][1]],centerX=centerLocation,centerY=centerLocation)
                     noiseValue += noise * amplitude
                     amplitude *= persistance
                     frequency *= lacunarity
@@ -762,7 +755,7 @@ class GRNG:
         if octaveAmount <= 0 or resolution <= 0: 
             warn('Octave count and resolution must be a positive integer value')
             return -1
-        
+
         centerLocation = resolution/2
         amplitude = 1
         frequency = 1
@@ -812,4 +805,13 @@ class GRNG:
 
 
         return noiseMap
+
+
+
+
+
+
+
+
+
 
