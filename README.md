@@ -180,6 +180,8 @@ Creates a list of perlin layered octave noise
 Example use:
 
 ```
+from GRNG import GRNG
+
 # Selects the wy64 algorithm for each random function with a starting seed of 10
 g = GRNG(seed=10, algo='wy64')
 print(GRNG.xorshift32(5))
