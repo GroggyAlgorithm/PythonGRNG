@@ -473,12 +473,14 @@ class GRNG:
         rVal = self.__MAX_VALUE
         for i in range(0, iterations):
             rVal = min(rVal,self.Next())
+        return rVal
 
     def LargestRandom(self, iterations:int) -> float:
         """Returns the largest value in x iterations"""
         rVal = self.__MIN_VALUE
         for i in range(0, iterations):
             rVal = max(rVal,self.Next())
+        return rVal
 
     def CenteredRandom(self, iterations:int) -> float:
         """Returns the most centered of values in a range up to x iterations"""
