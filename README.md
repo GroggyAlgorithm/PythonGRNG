@@ -182,6 +182,44 @@ Example use:
 ```
 # Selects the wy64 algorithm for each random function with a starting seed of 10
 g = GRNG(seed=10, algo='wy64')
+print(GRNG.xorshift32(5))
+print(GRNG.xorshift64(5))
+print(GRNG.reverse17(100))
+print(GRNG.reverse23(100))
+print(GRNG.xorshift128(5))
+print(GRNG.AdaptedLehmer32(5))
+print(GRNG.wyHash64(5))
+print(GRNG.Lehmer64(5))
 print(g.Next())
+print(g.Range(-9,100))
+print(g.NextBool())
+print(g.NextInt())
+print(g.RangeInt(-9,100))
+print(g.NextPercentage())
+print(g.NextSign())
+a = [1,2,3]
+print(g.NextElement(a))
+g.Shuffle(a)
+print(a)
+print(g.GrayScale())
+print(g.LowerBiasValue(0.1))
+print(g.UpperBiasValue(0.5))
+print(g.ExtremesBiasValue(0.5))
+print(g.CenterBiasValue(0.5))
+print(g.NextGaussian())
+print(g.Gaussian(center=5,deviation=4))
+
+for i in range(0,5):
+    print(g.SmallestRandom(5))
+    print(g.LargestRandom(5))
+    print(g.CenteredRandom(5))
+
+print(g.ImprovedNoise(1,2))
+print(g.SimplePerlin2D(1,2,1,2,1,2,4,4))
+print(g.SimplePerlin3D(1,2,3,1,2,1,2,3,1,2,3))
+print(g.CreatePermutationTable())
+print(g.PerlinOctaves3D(2,5,1,2,1,1,2,3,True,10_000))
+print(g.PerlinOctaves2D(5,5,1,2,1,1,2,True,10_000))
+print(g.Gradient(100,1,2,3))
 
 ```
