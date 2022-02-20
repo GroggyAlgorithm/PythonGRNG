@@ -147,7 +147,7 @@ Functions
 
     def CreatePermutationTable(self): Creates a permutation table of values from 0 - 255 inclusive
     
-    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0) -> float: Ken perlins improved noise
+    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0.25) -> float: Ken perlins improved noise
     
     def SimplePerlin2D(self, xIteration:Number,  yIteration:Number, noiseScale:Number, frequency:Number, 
     offsetX:Number=0, offsetY:Number=0, centerX:Number=0, centerY:Number=0) -> Number:
