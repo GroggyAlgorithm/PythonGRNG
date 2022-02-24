@@ -573,7 +573,7 @@ class GRNG:
                     self.__CbLerp(u, self.Gradient(p[AB+1], x  , y-1, z-1 ),
                     self.Gradient(p[BB+1], x-1, y-1, z-1 ))))
 
-        return (rVal)
+        return (rVal*GRNG.__MAX_VALUE)
 
 
     def SimplePerlin2D(self, xIteration:Number,  yIteration:Number, noiseScale:Number, frequency:Number, 
@@ -687,32 +687,43 @@ class GRNG:
             octaveOffsets.append([x,y])
             maximumHeight += amplitude
             amplitude *= persistance
+        
+        y=0
+        x=0
+
+        for w in range(0, math.floor(math.pow(resolution,2))):
+                
+            amplitude = 1
+            frequency = 1
+            noiseValue = 0
             
-        for x in range(0,resolution):
-            for y in range(0, resolution):
-                
-                amplitude = 1
-                frequency = 1
-                noiseValue = 0
-                
-                for i in octaveOffsets:
-                    noise = self.SimplePerlin2D(xIteration=x,yIteration=y, noiseScale=scale,frequency=frequency,offsetX=i[0],
-                                                offsetY=i[1], centerX=centerLocation,centerY=centerLocation)
-                    noiseValue += noise * amplitude
-                    amplitude *= persistance
-                    frequency *= lacunarity
-                
-                if (noiseValue < minimumHeight):
-                    minimumHeight = noiseValue
-                elif (noiseValue > maximumHeight):
-                    maximumHeight = noiseValue
+            for i in octaveOffsets:
+                noise = self.SimplePerlin2D(xIteration=x,yIteration=y, noiseScale=scale,frequency=frequency,offsetX=i[0],
+                                            offsetY=i[1], centerX=centerLocation,centerY=centerLocation)
+                noiseValue += noise * amplitude
+                amplitude *= persistance
+                frequency *= lacunarity
+            
+            if (noiseValue < minimumHeight):
+                minimumHeight = noiseValue
+            elif (noiseValue > maximumHeight):
+                maximumHeight = noiseValue
 
 
-                if (normalizeHeightGlobally):
-                    normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
-                    noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
-                    
-                noiseMap.append(noiseValue)
+            if (normalizeHeightGlobally):
+                normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
+                noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
+                
+            noiseMap.append(noiseValue)
+
+            y+=1
+            
+            if(y >= resolution):
+                x+=1
+                y=0
+
+            if(x >= resolution):
+                break
 
 
         if (normalizeHeightGlobally == False):
@@ -770,33 +781,50 @@ class GRNG:
             octaveOffsets.append([x,y,z])
             maximumHeight += amplitude
             amplitude *= persistance
+
+        y=0
+        x=0
+        z=0
+
+        for w in range(0, math.floor(math.pow(resolution,3))):
             
-        for x in range(0,resolution):
-            for y in range(0, resolution):
-                for z in range(0, resolution):
-                    
-                    amplitude = 1
-                    frequency = 1
-                    noiseValue = 0
-                    
-                    for i in octaveOffsets:
-                        noise = self.SimplePerlin3D(xIteration=x,yIteration=y, zIteration=z, noiseScale=scale,frequency=frequency,offsetX=i[0],
-                                                    offsetY=i[1],offsetZ=i[2], centerX=centerLocation,centerY=centerLocation, centerZ=centerLocation)
-                        noiseValue += noise * amplitude
-                        amplitude *= persistance
-                        frequency *= lacunarity
-                    
-                    if (noiseValue < minimumHeight):
-                        minimumHeight = noiseValue
-                    elif (noiseValue > maximumHeight):
-                        maximumHeight = noiseValue
+            amplitude = 1
+            frequency = 1
+            noiseValue = 0
+            
+            for i in octaveOffsets:
+                noise = self.SimplePerlin3D(xIteration=x,yIteration=y, zIteration=z, noiseScale=scale,frequency=frequency,offsetX=i[0],
+                                            offsetY=i[1],offsetZ=i[2], centerX=centerLocation,centerY=centerLocation, centerZ=centerLocation)
+                noiseValue += noise * amplitude
+                amplitude *= persistance
+                frequency *= lacunarity
+            
+            if (noiseValue < minimumHeight):
+                minimumHeight = noiseValue
+            elif (noiseValue > maximumHeight):
+                maximumHeight = noiseValue
 
 
-                    if (normalizeHeightGlobally):
-                        normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
-                        noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
-                        
-                    noiseMap.append(noiseValue)
+            if (normalizeHeightGlobally):
+                normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
+                noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
+                
+            noiseMap.append(noiseValue)
+
+            z+=1
+
+            if(z >= resolution):
+                y+=1
+                z=0
+            
+            if(y >= resolution):
+                x+=1
+                y=0
+
+            if(x >= resolution):
+                break
+
+
 
         if (normalizeHeightGlobally == False):
             
@@ -805,8 +833,6 @@ class GRNG:
 
 
         return noiseMap
-
-
 
 
 
