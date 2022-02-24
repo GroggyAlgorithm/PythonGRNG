@@ -810,10 +810,3 @@ class GRNG:
 
 
 
-
-
-
-g  = GRNG()
-print(g.ImprovedNoise(1,2))
-print(g.SimplePerlin2D(1,2,1,1))
-
