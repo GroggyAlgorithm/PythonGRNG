@@ -713,6 +713,8 @@ class GRNG:
             if (normalizeHeightGlobally):
                 normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
                 noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
+            else:
+                noiseValue = self.__InverseLerpClamped(minimumHeight, maximumHeight, noiseValue)
                 
             noiseMap.append(noiseValue)
 
@@ -725,11 +727,6 @@ class GRNG:
             if(x >= resolution):
                 break
 
-
-        if (normalizeHeightGlobally == False):
-            
-            for i in range(0, len(noiseMap)):
-                noiseMap[i] =  self.__InverseLerpClamped(minimumHeight, maximumHeight, noiseMap[i])
 
 
         return noiseMap
@@ -808,6 +805,8 @@ class GRNG:
             if (normalizeHeightGlobally):
                 normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
                 noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
+            else:
+                noiseValue = self.__InverseLerpClamped(minimumHeight, maximumHeight, noiseValue)
                 
             noiseMap.append(noiseValue)
 
@@ -826,13 +825,9 @@ class GRNG:
 
 
 
-        if (normalizeHeightGlobally == False):
-            
-            for i in range(0, len(noiseMap)):
-                noiseMap[i] =  self.__InverseLerpClamped(minimumHeight, maximumHeight, noiseMap[i])
-
 
         return noiseMap
+
 
 
 
