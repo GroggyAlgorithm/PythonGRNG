@@ -515,7 +515,7 @@ class GRNG:
 
         return newPermutation
     
-    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0.25) -> float:
+    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0) -> float:
         """Ken perlins improved noise
 
         Arguments
@@ -603,7 +603,7 @@ class GRNG:
         newX = (xIteration - centerX + offsetX) / divisor
         newY = (yIteration - centerY - offsetY) / divisor
 
-        perlinValue = self.ImprovedNoise(x=newX, y=newY, z=0.25) * 2 - 1
+        perlinValue = self.ImprovedNoise(x=newX, y=newY) * 2 - 1
 
         return perlinValue
 
@@ -813,5 +813,7 @@ class GRNG:
 
 
 
-
+g  = GRNG()
+print(g.ImprovedNoise(1,2))
+print(g.SimplePerlin2D(1,2,1,1))
 
