@@ -13,7 +13,6 @@ from numbers import Number
 import time
 import math
 import sys
-from warnings import warn
 ```
 
 Arguments
@@ -143,32 +142,54 @@ Functions
 
     def CenteredRandom(self, iterations:int) -> float: Returns the most centered of values in a range up to x iterations
 
-    def Gradient(self, hash:int, x:Number, y:Number, z:Number): Returns gradient value, from Ken Perlins inmproved  noise"
+    def Gradient1D(self, hash:int, x:Number):
+        Returns gradient value for perlin noise
+
+    def Gradient2D(self, hash:int, x:Number, y:Number):
+        Returns gradient value for perlin noise
+
+    def Gradient3D(self, hash:int, x:Number, y:Number, z:Number):
+        Returns gradient value, from Ken Perlins inmproved noise
 
     def CreatePermutationTable(self): Creates a permutation table of values from 0 - 255 inclusive
     
+    def Perlin1D(self, x:Number) -> float:
+        "Creates 1D perlin noise
+    
+    def Perlin2D(self, x:Number, y:Number) -> float:
+        Creates 2D perlin noise"
+    
+    def Perlin3D(self, x:Number, y:Number, z:Number) -> float:
+        Creates 3D perlin noise"
+    
+    
     def ImprovedNoise(self, x:Number, y:Number,  z:Number=0.25) -> float: Ken perlins improved noise
     
+    
+    
     def SimplePerlin2D(self, xIteration:Number,  yIteration:Number, noiseScale:Number, frequency:Number, 
-    offsetX:Number=0, offsetY:Number=0, centerX:Number=0, centerY:Number=0) -> Number:
+                      offsetX:Number=0, offsetY:Number=0, centerX:Number=0, centerY:Number=0) -> Number:
     
-    Creates simple 2D perlin noise using a fixed z axis value of 0.25
-    
-    def SimplePerlin3D(self, xIteration:Number, yIteration:Number, zIteration:Number, noiseScale:Number,   frequency:Number, offsetX:Number=0, offsetY:Number=0, offsetZ:Number=0, centerX:Number=0, centerY:Number=0, centerZ:Number=0) -> Number:
-    
-    Creates simple 3D perlin noise using ken perlins improved noise.
+        Creates simple 2D perlin noise
     
     
-   def PerlinOctaves2D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number,     
-scale:Number, offsetX:Number, offsetY:Number, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
-
-Creates a list of perlin layered octave noise
+    
+    def SimplePerlin3D(self, xIteration:Number, yIteration:Number, zIteration:Number, noiseScale:Number, frequency:Number,  
+                      offsetX:Number=0, offsetY:Number=0, offsetZ:Number=0, centerX:Number=0, centerY:Number=0, centerZ:Number=0) -> Number:
+    
+        Creates simple 3D perlin noise
+    
+    
+   def PerlinOctaves2D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number, 
+                        scale:Number, offsetX:Number, offsetY:Number, normalizeHeights:bool, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
+        
+        Creates a list of perlin layered octave noise
     
 
     def PerlinOctaves3D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number, 
-scale:Number, offsetX:Number, offsetY:Number, offsetZ:Number, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
-    
-Creates a list of perlin layered octave noise
+                        scale:Number, offsetX:Number, offsetY:Number, offsetZ:Number, normalizeHeights:bool, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
+        
+        Creates a list of perlin layered octave noise
 
 
 ```
