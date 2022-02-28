@@ -2,7 +2,6 @@ from numbers import Number
 import time
 import math
 import sys
-from warnings import warn
 
 
 class GRNG:
@@ -23,7 +22,6 @@ class GRNG:
     
     from warnings import warn
     
-
     Arguments:
     -----------------------------
     
@@ -141,27 +139,55 @@ class GRNG:
 
     def CenteredRandom(self, iterations:int) -> float: Returns the most centered of values in a range up to x iterations
 
-    def Gradient(self, hash:int, x:Number, y:Number, z:Number): Returns gradient value, from Ken Perlins inmproved noise"
+    def Gradient1D(self, hash:int, x:Number):
+        Returns gradient value for perlin noise
+
+    def Gradient2D(self, hash:int, x:Number, y:Number):
+        Returns gradient value for perlin noise
+
+    def Gradient3D(self, hash:int, x:Number, y:Number, z:Number):
+        Returns gradient value, from Ken Perlins inmproved noise
 
     def CreatePermutationTable(self): Creates a permutation table of values from 0 - 255 inclusive
     
-    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0) -> float: Ken perlins improved noise
+    def Perlin1D(self, x:Number) -> float:
+        "Creates 1D perlin noise
+    
+    def Perlin2D(self, x:Number, y:Number) -> float:
+        Creates 2D perlin noise"
+    
+    def Perlin3D(self, x:Number, y:Number, z:Number) -> float:
+        Creates 3D perlin noise"
+    
+    
+    def ImprovedNoise(self, x:Number, y:Number,  z:Number=0.25) -> float: Ken perlins improved noise
+    
+    
     
     def SimplePerlin2D(self, xIteration:Number,  yIteration:Number, noiseScale:Number, frequency:Number, 
-    offsetX:Number=0, offsetY:Number=0, centerX:Number=0, centerY:Number=0) -> Number:
-    Creates simple 2D perlin noise using a fixed z axis value of 0.25
+                      offsetX:Number=0, offsetY:Number=0, centerX:Number=0, centerY:Number=0) -> Number:
+    
+        Creates simple 2D perlin noise
+    
+    
     
     def SimplePerlin3D(self, xIteration:Number, yIteration:Number, zIteration:Number, noiseScale:Number, frequency:Number,  
-    offsetX:Number=0, offsetY:Number=0, offsetZ:Number=0, centerX:Number=0, centerY:Number=0, centerZ:Number=0) -> Number:
-    Creates simple 3D perlin noise using ken perlins improved noise.
+                      offsetX:Number=0, offsetY:Number=0, offsetZ:Number=0, centerX:Number=0, centerY:Number=0, centerZ:Number=0) -> Number:
     
-    def PerlinOctaves2D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number, 
-    scale:Number, offsetX:Number, offsetY:Number, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
-    Creates a list of perlin layered octave noise
+        Creates simple 3D perlin noise
     
+    
+   def PerlinOctaves2D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number, 
+                        scale:Number, offsetX:Number, offsetY:Number, normalizeHeights:bool, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
+        
+        Creates a list of perlin layered octave noise
+    
+
     def PerlinOctaves3D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number, 
-    scale:Number, offsetX:Number, offsetY:Number, offsetZ:Number, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
-    Creates a list of perlin layered octave noise
+                        scale:Number, offsetX:Number, offsetY:Number, offsetZ:Number, normalizeHeights:bool, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
+        
+        Creates a list of perlin layered octave noise
+
     
     
     
@@ -170,7 +196,23 @@ class GRNG:
     __MAX_VALUE = sys.maxsize-1
     __MIN_VALUE = -__MAX_VALUE
     
-    def __init__(self,seed:int=None, algo:str=None) -> None:
+    def __init__(self,seed:int=None, algo:str=None, usePremadePermutation:bool=True) -> None:
+        
+        self.permutationTable = [151,160,137,91,90,15,
+        131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
+        190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
+        88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
+        77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+        102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
+        135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
+        5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+        223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
+        129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
+        251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
+        49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
+        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,
+        151] if usePremadePermutation == True else self.CreatePermutationTable()
+        
         self.seed = seed if seed is not None else math.trunc(time.time())
         __tmpalgo = algo.lower() if algo is not None else ''
         match __tmpalgo:
@@ -186,7 +228,7 @@ class GRNG:
                 self.__randAlgo = lambda x: GRNG.Lehmer64(x)
             case _:
                 self.__randAlgo = lambda x: GRNG.AdaptedLehmer32(x)
-        self.permutationTable = self.CreatePermutationTable()
+        
         pass
 
     def __CbLerp(self, a:Number,b:Number,t:Number) -> Number:
@@ -490,7 +532,21 @@ class GRNG:
             if (abs(rand) - 0.5) < (rVal - 0.5): rVal = rand
         return rVal
 
-    def Gradient(self, hash:int, x:Number, y:Number, z:Number):
+
+
+    def Gradient1D(self, hash:int, x:Number):
+        """Returns gradient value for perlin noise"""
+        rV = x if (hash & 1) == 0 else -x
+        return (rV)
+
+
+    def Gradient2D(self, hash:int, x:Number, y:Number):
+        """Returns gradient value for perlin noise"""
+        rU = y if (hash & 2) == 0 else -y
+        rV = x if (hash & 1) == 0 else -x
+        return (rV+rU)
+
+    def Gradient3D(self, hash:int, x:Number, y:Number, z:Number):
         """Returns gradient value, from Ken Perlins inmproved noise"""
         h = hash & 15
         u = x if h<8 else y
@@ -515,25 +571,70 @@ class GRNG:
 
         return newPermutation
     
+    def Perlin1D(self, x:Number) -> float:
+        """Creates 1D perlin noise"""
+        newX = math.floor(x) & 0xff
+        x-= math.floor(x)
+        fadedX = self.__Fade(x)
+        perm = self.permutationTable
+        return self.__CbLerp(fadedX,self.Gradient1D(perm[newX],x),self.Gradient1D(perm[newX+1],x-1)) * 2 *GRNG.__MAX_VALUE
+    
+    def Perlin2D(self, x:Number, y:Number) -> float:
+        """Creates 2D perlin noise"""
+        perm = self.permutationTable
+        newX = math.floor(x) & 0xff
+        newY = math.floor(y) & 0xff
+        x-= math.floor(x)
+        y-= math.floor(y)
+        fadedX = self.__Fade(x)
+        fadedY = self.__Fade(y)
+        A = (perm[newX] + newY) & 0xff
+        B = (perm[newX + 1] + newY) & 0xff
+        return self.__CbLerp(fadedY, self.__CbLerp(fadedX, self.Gradient2D(perm[A],x,y),self.Gradient2D(perm[B], x-1,y)),
+            self.__CbLerp(fadedX, self.Gradient2D(perm[A+1],x,y-1), self.Gradient2D(perm[B+1], x-1, y-1))) *GRNG.__MAX_VALUE
+    
+    def Perlin3D(self, x:Number, y:Number, z:Number) -> float:
+        """Creates 3D perlin noise"""
+        perm = self.permutationTable
+        newX = math.floor(x) & 0xff
+        newY = math.floor(y) & 0xff
+        newZ = math.floor(z) & 0xff
+        x-= math.floor(x)
+        y-= math.floor(y)
+        z-= math.floor(z)
+        fadedX = self.__Fade(x)
+        fadedY = self.__Fade(y)
+        fadedZ = self.__Fade(z)
+        
+        A = (perm[newX] + newY) & 0xff
+        B = (perm[newX + 1] + newY) & 0xff
+        AA = (perm[A] + newZ) & 0xff
+        BA = (perm[B] + newZ) & 0xff
+        AB = (perm[A+1] + newZ) & 0xff
+        BB = (perm[B+1] + newZ) & 0xff
+        
+        return self.__CbLerp(fadedZ, 
+            self.__CbLerp(fadedY, 
+                self.__CbLerp(fadedX, self.Gradient(perm[AA], x, y, z), self.Gradient(perm[BA], x-1, y, z)),
+                    self.__CbLerp(fadedX, self.Gradient(perm[AB], x, y-1, z), self.Gradient(perm[BB], x-1, y-1, z))),
+                       self.__CbLerp(fadedY, self.__CbLerp(fadedX, self.Gradient(perm[AA+1], x, y  , z-1), self.Gradient(perm[BA+1], x-1, y  , z-1)),
+                            self.__CbLerp(fadedX, self.Gradient(perm[AB+1], x, y-1, z-1), self.Gradient(perm[BB+1], x-1, y-1, z-1)))) *GRNG.__MAX_VALUE
+        
+    
     def ImprovedNoise(self, x:Number, y:Number,  z:Number=0) -> float:
-        """Ken perlins improved noise
-
+        """Based on Ken perlins improved noise
         Arguments
         ---------------------------
         x: x axis value
         y: y axis value
         z: z axis value
         
-
         Returns
         ---------------------------
          -> Number: A Perlin value
-
         """
         if self.permutationTable is None:
             self.permutationTable = self.CreatePermutationTable()
-        else:
-            self.Shuffle(self.permutationTable)
         
         p = self.permutationTable
 
@@ -574,12 +675,13 @@ class GRNG:
                     self.Gradient(p[BB+1], x-1, y-1, z-1 ))))
 
         return (rVal*GRNG.__MAX_VALUE)
-
-
+    
+    
+    
     def SimplePerlin2D(self, xIteration:Number,  yIteration:Number, noiseScale:Number, frequency:Number, 
                       offsetX:Number=0, offsetY:Number=0, centerX:Number=0, centerY:Number=0) -> Number:
     
-        """Creates simple 2D perlin noise using a fixed z axis value of 0.25
+        """Creates simple 2D perlin noise
         
         Arguments
         --------------------------
@@ -603,14 +705,14 @@ class GRNG:
         newX = (xIteration - centerX + offsetX) / divisor
         newY = (yIteration - centerY - offsetY) / divisor
 
-        perlinValue = self.ImprovedNoise(x=newX, y=newY) * 2 - 1
+        perlinValue = self.Perlin2D(x=newX, y=newY) * 2 - 1
 
         return perlinValue
 
     def SimplePerlin3D(self, xIteration:Number, yIteration:Number, zIteration:Number, noiseScale:Number, frequency:Number,  
                       offsetX:Number=0, offsetY:Number=0, offsetZ:Number=0, centerX:Number=0, centerY:Number=0, centerZ:Number=0) -> Number:
     
-        """Creates simple 3D perlin noise using
+        """Creates simple 3D perlin noise
         
         Arguments
         --------------------------
@@ -638,13 +740,13 @@ class GRNG:
         newy = (yIteration - centerY - offsetY) / divisor
         newz = (zIteration - centerZ + offsetZ) / divisor
 
-        perlinValue = (self.ImprovedNoise(x=newx, y=newy, z=newz) * 2 - 1)
+        perlinValue = (self.Perlin3D(x=newx, y=newy, z=newz) * 2 - 1)
 
         return perlinValue
 
 
     def PerlinOctaves2D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number, 
-                        scale:Number, offsetX:Number, offsetY:Number, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
+                        scale:Number, offsetX:Number, offsetY:Number, normalizeHeights:bool, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
         
         """Creates a list of perlin layered octave noise
         
@@ -656,6 +758,7 @@ class GRNG:
         lacunarity:Number- The lacunarity value for the x axis of the noise wave.
         scale:Number- The scaling for the noise. Controls the zooming in on the noise.
         offsets X and Y:Number- The offsets for the noise.
+        normalizeHeights:bool- if the height should be normalized
         normalizeHeightGlobally:bool- If the values should be normalized globally. Defaults to true
         roughness:Number- Roughness value to add to the noise. Defaults to 10_000-
         
@@ -666,19 +769,19 @@ class GRNG:
         
         """
         
-        
+        if(octaveAmount < 1): octaveAmount = 1
+        if(persistance <= 0): persistance = 0.001
+        if(lacunarity < 0.01): lacunarity = 0.01
+        if(resolution < 1): resolution = 1
         noiseMap = []
         octaveOffsets = [[0,0]]
-        if octaveAmount <= 0 or resolution <= 0: 
-            warn('Octave count and resolution must be a positive integer value')
-            return -1
         
         
         centerLocation = resolution/2
         amplitude = 1
         frequency = 1
-        maximumHeight = sys.maxsize
-        minimumHeight = -sys.maxsize
+        maximumHeight = 0
+        minimumHeight = 0
         
         # GetOctaves
         for i in range(0, octaveAmount):
@@ -686,6 +789,7 @@ class GRNG:
             y = self.Range(-roughness, roughness) - offsetY - centerLocation
             octaveOffsets.append([x,y])
             maximumHeight += amplitude
+            minimumHeight -= amplitude
             amplitude *= persistance
         
         y=0
@@ -710,11 +814,11 @@ class GRNG:
                 maximumHeight = noiseValue
 
 
-            if (normalizeHeightGlobally):
+            if (normalizeHeightGlobally and normalizeHeights):
                 normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
                 noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
-            else:
-                noiseValue = self.__InverseLerpClamped(minimumHeight, maximumHeight, noiseValue)
+            elif(normalizeHeights):
+                noiseValue = self.__Clamp(noiseValue,minimumHeight, maximumHeight)
                 
             noiseMap.append(noiseValue)
 
@@ -734,7 +838,7 @@ class GRNG:
 
 
     def PerlinOctaves3D(self, octaveAmount:int, resolution:int, persistance:Number, lacunarity:Number, 
-                        scale:Number, offsetX:Number, offsetY:Number, offsetZ:Number, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
+                        scale:Number, offsetX:Number, offsetY:Number, offsetZ:Number, normalizeHeights:bool, normalizeHeightGlobally:bool=True, roughness:Number=10_000):
         
         """Creates a list of perlin layered octave noise
         
@@ -746,6 +850,7 @@ class GRNG:
         lacunarity:Number- The lacunarity value for the x axis of the noise wave.
         scale:Number- The scaling for the noise. Controls the zooming in on the noise.
         offsets X and Y:Number- The offsets for the noise.
+        normalizeHeights:bool- if the height should be normalized
         normalizeHeightGlobally:bool- If the values should be normalized globally. Defaults to true
         roughness:Number- Roughness value to add to the noise. Defaults to 10_000-
         
@@ -756,19 +861,21 @@ class GRNG:
         
         """
         
+        if(octaveAmount < 1): octaveAmount = 1
+        if(persistance <= 0): persistance = 0.001
+        if(lacunarity < 0.01): lacunarity = 0.01
+        if(resolution < 1): resolution = 1
         
         noiseMap = []
         octaveOffsets = [[0,0,0]]
         
-        if octaveAmount <= 0 or resolution <= 0: 
-            warn('Octave count and resolution must be a positive integer value')
-            return -1
+        
 
         centerLocation = resolution/2
         amplitude = 1
         frequency = 1
-        maximumHeight = sys.maxsize
-        minimumHeight = -sys.maxsize
+        maximumHeight = 0
+        minimumHeight = 0
         
         # GetOctaves
         for i in range(0, octaveAmount):
@@ -777,6 +884,7 @@ class GRNG:
             z = self.Range(-roughness, roughness) - offsetZ - centerLocation
             octaveOffsets.append([x,y,z])
             maximumHeight += amplitude
+            minimumHeight -= amplitude
             amplitude *= persistance
 
         y=0
@@ -802,10 +910,10 @@ class GRNG:
                 maximumHeight = noiseValue
 
 
-            if (normalizeHeightGlobally):
+            if (normalizeHeightGlobally and normalizeHeights):
                 normalizedHeight = (noiseValue + 1) / (maximumHeight / 0.9)
                 noiseValue = self.__Clamp(normalizedHeight, 0, sys.maxsize)
-            else:
+            elif(normalizeHeights):
                 noiseValue = self.__InverseLerpClamped(minimumHeight, maximumHeight, noiseValue)
                 
             noiseMap.append(noiseValue)
@@ -827,7 +935,3 @@ class GRNG:
 
 
         return noiseMap
-
-
-
-
